@@ -97,17 +97,7 @@
 
     function showResult({logit, p, isPositive, label}) {
       output.style.display = "block";
-      const badge = `<span class="badge"><b>Classification:</b> ${label}</span>`;
-      const probLine = `<div class="row"><span class="muted"><b>P(${positiveLabel})</b> = ${formatNumber(p, 4)}</span></div>`;
-      const logitLine = `<div class="row"><span class="muted"><b>Logit</b> = ${formatNumber(logit, 4)}</span></div>`;
-      const threshLine = `<div class="row"><span class="muted"><b>Threshold</b> = ${formatNumber(MODEL.threshold, 3)} (fixed)</span></div>`;
-
-      output.innerHTML = `
-        ${badge}
-        ${probLine}
-        ${logitLine}
-        ${threshLine}
-      `;
+      output.innerHTML = `<span class="badge"><b>Classification:</b> ${label}</span>`;
 
       // Optional: subtle visual emphasis
       output.style.background = isPositive ? "#fff7f2" : "#f2fff7";
