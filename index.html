@@ -27,12 +27,12 @@
   <div class="wrap">
     <div class="card">
       <h1>Metastasis vs Cyst Calculator</h1>
-      <p class="muted">Enter <b>VNC</b> and <b>Iodine</b>. Click <b>Calculate</b> to get the model classification.</p>
+      <p class="muted">Enter <b>VUE</b> and <b>Iodine</b>. Click <b>Calculate</b> to get the model classification.</p>
 
       <div class="grid">
         <div>
-          <label for="vnc">VNC [HU]</label>
-          <input id="vnc" type="number" step="any" inputmode="decimal" placeholder="e.g., 12.3" />
+          <label for="vue">VUE [HU]</label>
+          <input id="vue" type="number" step="any" inputmode="decimal" placeholder="e.g., 12.3" />
         </div>
         <div>
           <label for="iodine">Iodine [mg ml<sup>−1</sup>]</label>
@@ -54,7 +54,7 @@
     // Model parameters
     const MODEL = {
       b0: -0.4645,        // intercept
-      bVNC: 0.0069,      // coefficient for VNC
+      bVUC: 0.0069,      // coefficient for VUE
       bIodine: 0.1624,   // coefficient for Iodine
       threshold: 0.4419 // operating threshold on probability p - thr_for_and_sens: safe exclusion of cysts
     };
@@ -62,7 +62,7 @@
     const positiveLabel = "Metastasis";
     const negativeLabel = "Cyst";
 
-    const vncEl = document.getElementById("vnc");
+    const vucEl = document.getElementById("vuc");
     const iodineEl = document.getElementById("iodine");
     const btn = document.getElementById("calcBtn");
     const output = document.getElementById("output");
@@ -88,8 +88,8 @@
       return Number.isFinite(v) ? v : null;
     }
 
-    function classify(vnc, iodine) {
-      const logit = MODEL.b0 + MODEL.bVNC * vnc + MODEL.bIodine * iodine;
+    function classify(vuc, iodine) {
+      const logit = MODEL.b0 + MODEL.bVUC * vuc + MODEL.bIodine * iodine;
       const p = sigmoid(logit);
       const isPositive = p >= MODEL.threshold;
       return { logit, p, isPositive, label: isPositive ? positiveLabel : negativeLabel };
@@ -105,23 +105,23 @@
     }
 
     btn.addEventListener("click", () => {
-      const vnc = parseInput(vncEl);
+      const vuc = parseInput(vucEl);
       const iodine = parseInput(iodineEl);
 
-      if (vnc === null || iodine === null) {
+      if (vuc === null || iodine === null) {
         output.style.display = "block";
         output.style.background = "#f7f7f7";
         output.style.borderColor = "#e7e7e7";
-        output.innerHTML = `<span class="badge">Please enter valid numbers for VNC and Iodine.</span>`;
+        output.innerHTML = `<span class="badge">Please enter valid numbers for VUC and Iodine.</span>`;
         return;
       }
 
-      const res = classify(vnc, iodine);
+      const res = classify(vuc, iodine);
       showResult(res);
     });
 
     // Nice UX: Enter key triggers calculate from either input
-    [vncEl, iodineEl].forEach(el => {
+    [vucEl, iodineEl].forEach(el => {
       el.addEventListener("keydown", (e) => {
         if (e.key === "Enter") btn.click();
       });
