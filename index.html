@@ -54,7 +54,7 @@
     // Model parameters
     const MODEL = {
       b0: -0.4645,        // intercept
-      bVUC: 0.0069,      // coefficient for VUE
+      bVUE: 0.0069,      // coefficient for VUE
       bIodine: 0.1624,   // coefficient for Iodine
       threshold: 0.4419 // operating threshold on probability p - thr_for_and_sens: safe exclusion of cysts
     };
@@ -62,7 +62,7 @@
     const positiveLabel = "Metastasis";
     const negativeLabel = "Cyst";
 
-    const vucEl = document.getElementById("vuc");
+    const vueEl = document.getElementById("vue");
     const iodineEl = document.getElementById("iodine");
     const btn = document.getElementById("calcBtn");
     const output = document.getElementById("output");
@@ -88,8 +88,8 @@
       return Number.isFinite(v) ? v : null;
     }
 
-    function classify(vuc, iodine) {
-      const logit = MODEL.b0 + MODEL.bVUC * vuc + MODEL.bIodine * iodine;
+    function classify(vue, iodine) {
+      const logit = MODEL.b0 + MODEL.bVUE * vue + MODEL.bIodine * iodine;
       const p = sigmoid(logit);
       const isPositive = p >= MODEL.threshold;
       return { logit, p, isPositive, label: isPositive ? positiveLabel : negativeLabel };
@@ -105,23 +105,23 @@
     }
 
     btn.addEventListener("click", () => {
-      const vuc = parseInput(vucEl);
+      const vue = parseInput(vueEl);
       const iodine = parseInput(iodineEl);
 
-      if (vuc === null || iodine === null) {
+      if (vue === null || iodine === null) {
         output.style.display = "block";
         output.style.background = "#f7f7f7";
         output.style.borderColor = "#e7e7e7";
-        output.innerHTML = `<span class="badge">Please enter valid numbers for VUC and Iodine.</span>`;
+        output.innerHTML = `<span class="badge">Please enter valid numbers for VUE and Iodine.</span>`;
         return;
       }
 
-      const res = classify(vuc, iodine);
+      const res = classify(vue, iodine);
       showResult(res);
     });
 
     // Nice UX: Enter key triggers calculate from either input
-    [vucEl, iodineEl].forEach(el => {
+    [vueEl, iodineEl].forEach(el => {
       el.addEventListener("keydown", (e) => {
         if (e.key === "Enter") btn.click();
       });
